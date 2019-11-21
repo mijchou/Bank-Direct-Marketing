@@ -4,6 +4,8 @@ Created on Mon Oct  7
 @author: Miriam
 """
 
+print('hi')
+
 ## Setups
 
 import os
