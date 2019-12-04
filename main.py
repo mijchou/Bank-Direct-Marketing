@@ -142,4 +142,42 @@ y_pred
 unique, counts = np.unique(y_pred, return_counts=True)
 dict(zip(unique, counts))
 
-## Validation
+
+## Different thresholds
+
+
+flat_list = [item for sublist in y_score for item in sublist][slice(1, 9601, 2)]
+#flat_list = [item for sublist in y_score for item in sublist][slice(1, 12001, 2)]
+
+precision = list()
+recall = list()
+f1 = list()
+
+for j in np.arange(0, 1, 0.01):
+    y_pred = list()
+    for i in range(0, 4800):
+  #  for i in range(0, 6000):
+        if flat_list[i] > j:  
+            y_pred.append(1)
+        else: y_pred.append(0)
+
+#confusion_matrix(y_test, y_pred)
+#print(round(accuracy_score(y_test, y_pred), 2)*100)
+#print(classification_report(y_test, y_pred))
+
+    report = classification_report(y_test, y_pred, output_dict=True)
+    recall.append(report['1']['recall'])
+    precision.append(report['1']['precision'])
+    f1.append(report['1']['f1-score'])
+
+import matplotlib.pyplot as plt
+
+# Data
+df = pd.DataFrame({'x': np.arange(0, 1, 0.01), 'precision': precision, 'recall': recall, 'f1': f1 })
+
+# multiple line plot
+plt.plot( 'x', 'precision', data=df, marker='', color='blue', linewidth=2)
+plt.plot( 'x', 'recall', data=df, marker='', color='green', linewidth=2)
+plt.plot( 'x', 'f1', data=df, marker='', color='olive', linewidth=2)
+plt.legend()
+
